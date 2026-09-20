@@ -1,0 +1,6 @@
+scenario,release_seconds,pgo_seconds,pgo_change_percent
+sha256,1.264240,1.270550,0.50
+sha3-256,1.266740,1.279530,1.01
+hmac-sha256,1.375650,1.341350,-2.49
+pbkdf2-hmac-sha256-kiter1,1.395270,1.437890,3.05
+evpkdf-sha256,1.286820,1.289640,0.22

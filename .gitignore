@@ -1,0 +1,53 @@
+# Build and generated test output
+/build/
+/tests/build/
+/tests/artifacts/
+/tests/profiles/
+/benchmark-data/
+
+# Release binaries and generated packages
+/dist/HASHER*
+/dist/releases/
+
+# CMake / Ninja
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+build.ninja
+.ninja_deps
+.ninja_log
+compile_commands.json
+Testing/
+packages/
+_deps/
+
+# Instrumentation and diagnostics
+*.profraw
+*.profdata
+*.gcda
+*.gcno
+*.pdb
+*.ilk
+*.dSYM/
+
+# Compiled output
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Local/editor files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.swp
+*.tmp
+.DS_Store
+Thumbs.db

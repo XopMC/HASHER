@@ -1,0 +1,9 @@
+algorithm,threads,lines,seconds
+pbkdf2-hmac-sha256,1,8192,8.500460
+pbkdf2-hmac-sha256,2,8192,4.375340
+pbkdf2-hmac-sha256,4,8192,2.431590
+pbkdf2-hmac-sha256,8,8192,1.376860
+pbkdf2-hmac-sha512,1,8192,37.825170
+pbkdf2-hmac-sha512,2,8192,19.729720
+pbkdf2-hmac-sha512,4,8192,10.959970
+pbkdf2-hmac-sha512,8,8192,6.072240

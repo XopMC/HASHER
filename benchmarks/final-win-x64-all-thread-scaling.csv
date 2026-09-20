@@ -1,0 +1,9 @@
+threads,mode,seconds
+1,file,23.236684
+1,pipe,20.511162
+2,file,10.021102
+2,pipe,10.151912
+4,file,5.351041
+4,pipe,5.371288
+8,file,2.885946
+8,pipe,2.873112

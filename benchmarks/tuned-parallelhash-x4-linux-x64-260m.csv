@@ -1,0 +1,9 @@
+algorithm,backend,seconds_median
+parallelhash128,x4-avx2,5.772790
+parallelhash128,portable,12.845240
+parallelhash256,x4-avx2,8.037140
+parallelhash256,portable,15.045120
+parallelhashxof128,x4-avx2,5.775140
+parallelhashxof128,portable,12.789200
+parallelhashxof256,x4-avx2,7.981420
+parallelhashxof256,portable,14.953520

@@ -1,0 +1,6 @@
+The x86 SM3-NI state layout and schedule in HASHER are adapted from
+Intel Cryptography Primitives, Copyright (C) 2024 Intel Corporation.
+
+Licensed under the Apache License, Version 2.0. A complete copy of the
+Apache-2.0 license is included in this directory as
+`BLAKE3-Apache-2.0.txt`.
