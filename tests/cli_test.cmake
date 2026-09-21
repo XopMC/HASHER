@@ -137,6 +137,8 @@ set(help_options
   -salt -salt-hex -kiter
   -pbkdf-md5 -pbkdf-sha1 -pbkdf-sha224 -pbkdf-sha256 -pbkdf-sha384 -pbkdf-sha512
   -pbkdf-rmd160 -pbkdf-keccak256 -pbkdf-keccak512
+  -pbkdf2-md5 -pbkdf2-sha1 -pbkdf2-sha224 -pbkdf2-sha256 -pbkdf2-sha384 -pbkdf2-sha512
+  -pbkdf2-rmd160 -pbkdf2-keccak256 -pbkdf2-keccak512
   -pbkdf2-hmac-md5 -pbkdf2-hmac-sha1 -pbkdf2-hmac-sha224 -pbkdf2-hmac-sha256
   -pbkdf2-hmac-sha384 -pbkdf2-hmac-sha512
   -evpkdf-md5 -evpkdf-sha1 -evpkdf-sha224 -evpkdf-sha256 -evpkdf-sha384 -evpkdf-sha512
@@ -171,10 +173,12 @@ endif()
 
 file(WRITE "${tmp}" "password\n")
 run(pbkdf1 pbkdf1_rc -pbkdf-sha256 -salt salt -kiter 2)
+run(pbkdf2_direct pbkdf2_direct_rc -pbkdf2-sha256 -salt salt -kiter 2 -len 32)
 run(pbkdf2 pbkdf2_rc -pbkdf2-hmac-sha256 -salt salt -kiter 2 -len 32)
 run(evpkdf evpkdf_rc -evpkdf-md5 -salt saltsalt -kiter 1 -len 32)
 run(pbkdf2_alias pbkdf2_alias_rc -pbkdf-hmac-sha256 -salt salt -kiter 2 -len 32)
 if(NOT pbkdf1_rc EQUAL 0 OR NOT pbkdf1 STREQUAL "a6b9d96cc74d52749372886896349c07e2137fe8788b496d76f6d56e49a9bd52\n" OR
+   NOT pbkdf2_direct_rc EQUAL 0 OR NOT pbkdf2_direct STREQUAL "eb81bb537eb16b0b73d0ad1ed9fb8727a6138a8c7c4b69496028e39d2ea0375a\n" OR
    NOT pbkdf2_rc EQUAL 0 OR NOT pbkdf2 STREQUAL "ae4d0c95af6b46d32d0adff928f06dd02a303f8ef3c251dfd6e2d85a95474c43\n" OR
    NOT evpkdf_rc EQUAL 0 OR NOT evpkdf STREQUAL "fdbdf3419fff98bdb0241390f62a9db35f4aba29d77566377997314ebfc709f2\n" OR
    NOT pbkdf2_alias_rc EQUAL 0 OR NOT pbkdf2_alias STREQUAL pbkdf2)

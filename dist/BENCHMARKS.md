@@ -29,10 +29,11 @@ Final all-algorithm rerun on a 260 MiB corpus (4,194,304 lines, 64 input bytes p
 | HMAC-SHA256 | 15.41 M | 15.84 M | 14.35 M | 13.70 M |
 | HMAC-SHA512 | 9.42 M | 9.44 M | 8.12 M | 7.98 M |
 | PBKDF2-HMAC-SHA256 (`-kiter 1`) | 14.77 M | 15.54 M | 13.08 M | 12.24 M |
+| direct-PBKDF2-SHA256 (`-kiter 1`) | 19.44 M | 19.52 M | 12.37 M | 11.69 M |
 
-Units are output lines per second. The raw CSV files contain all 73 algorithms in both modes: `final2-win-x64-all-file-pipe-260m-r3.csv` and `final2-linux-x64-all-file-pipe-260m-r3.csv`. Windows uses native `cmd > NUL`; Linux input is on native WSL ext4. PowerShell-redirection and `/mnt` measurements were rejected because they benchmarked the host bridge rather than HASHER.
+Units are output lines per second. The v1.0 baseline CSV files contain its 73 algorithms in both modes: `final2-win-x64-all-file-pipe-260m-r3.csv` and `final2-linux-x64-all-file-pipe-260m-r3.csv`. Windows uses native `cmd > NUL`; Linux input is on native WSL ext4. PowerShell-redirection and `/mnt` measurements were rejected because they benchmarked the host bridge rather than HASHER.
 
-Fresh 1/2/4/8-thread matrices for all 30 HMAC/KDF variants are in `final2-kdf-thread-scaling-win-x64-260m-r3.csv` and `final2-kdf-thread-scaling-linux-x64-260m-r3.csv`. They exposed and corrected stale 2-thread limits; for example HMAC-SHA512 improved from about 3.5 M to 9.4 M lines/s on Windows and from about 3.5 M to 8.1 M on Linux.
+Fresh 1/2/4/8-thread matrices cover all HMAC/KDF variants. The original 30-variant evidence is in `final2-kdf-thread-scaling-*.csv`; the nine direct-PBKDF2 additions have dedicated `pbkdf2-direct-*-thread-*.csv` matrices. They exposed and corrected stale worker limits; for example HMAC-SHA512 improved from about 3.5 M to 9.4 M lines/s on Windows and from about 3.5 M to 8.1 M on Linux.
 
 Earlier baseline scenarios (before the KDF expansion), Windows x64, 260 MiB / 4,194,304 input lines:
 
@@ -43,11 +44,22 @@ Earlier baseline scenarios (before the KDF expansion), Windows x64, 260 MiB / 4,
 | SHA-256 iteration 10 | 0.565 s | 0.533 s |
 | SHA-256 iterations 1,3-5 | 0.568 s | 0.548 s |
 
-The current registry contains 73 algorithms. Each new HMAC/PBKDF/PBKDF2-HMAC/EvpKDF variant was measured separately with file and native PIPE input on the 260 MiB corpus and with 1/2/4/8 workers.
+The current registry contains 82 algorithms. Each HMAC/PBKDF/direct-PBKDF2/PBKDF2-HMAC/EvpKDF variant is measured separately with file and native PIPE input and with 1/2/4/8 workers. Direct-PBKDF2 also has a higher-round matrix to prevent tuning only for one-round benchmarks.
+
+Direct-PBKDF2-SHA256, one KDF round, full 260 MiB file/PIPE path:
+
+| Platform | File | PIPE |
+|---|---:|---:|
+| Windows x64 | 19.44 M lines/s | 19.52 M lines/s |
+| WSL Linux x64 | 12.37 M lines/s | 11.69 M lines/s |
+| Linux ARM64 | 8.58 M lines/s | 8.56 M lines/s |
+| macOS ARM64 | 30.87 M lines/s | 31.38 M lines/s |
+| Android/Termux ARM64 | 19.90 M lines/s | 18.44 M lines/s |
 
 Notable accepted optimizations:
 
 - RHash-backed MD5/RIPEMD KDF paths improved selected x64 workloads by roughly 27–50%.
+- Selective password-prefix state cloning improved high-round direct-PBKDF2 MD5/RIPEMD-160 by roughly 61–91%, while per-platform measurements kept the faster non-cloned path for regressing SHA/Keccak combinations.
 - ParallelHash x4 inner-block batching improved `-bsize 8` workloads by about 1.9–2.2x.
 - PBKDF2-HMAC-SHA256 at 10,000 KDF rounds scaled from 8.50 s at one worker to 1.38 s at eight workers on Linux x64.
 - ARM HMAC/KDF backends are selected per algorithm and OS; paths that regressed on real Linux/macOS ARM64 hardware were disabled.
@@ -56,7 +68,7 @@ Notable accepted optimizations:
 - Full ARM SHA-1/SHA-256 message scheduling improved the native core by roughly 2.3-3.2x across Qualcomm SM8850, Linux ARM64 and macOS ARM64 measurements.
 - Qualcomm SM8850 native SM3 reached about 4.2M 64-byte hashes/s per worker and about 9.8M end-to-end lines/s with eight workers.
 - On the SM8850 260 MiB corpus, SHA-256 reached about 21.5M file lines/s, 17.9M PIPE lines/s and produced the complete 276,889,600-byte output in 0.344 seconds.
-- All 73 algorithms together processed that corpus in 18.718 seconds from a file and 21.614 seconds from PIPE.
+- The v1.0 73-algorithm baseline processed that corpus in 18.718 seconds from a file and 21.614 seconds from PIPE.
 - ARM SHA3 uses x2+x2 batching for four short records. xxHash SVE and an alternative SHA3 x1 intrinsic core were benchmarked and rejected because they regressed real complete-hash workloads.
 
 x64 SM3-NI, SHA512-NI and potential SM4 work is explicitly deferred until a physical capable x64 stand is available; see `benchmarks/X64-NATIVE-BACKLOG.md`.

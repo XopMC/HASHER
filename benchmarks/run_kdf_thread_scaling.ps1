@@ -2,6 +2,7 @@ param([Parameter(Mandatory=$true)][string]$Exe,[Parameter(Mandatory=$true)][stri
 $Exe=(Resolve-Path $Exe).Path;$InputFile=(Resolve-Path $InputFile).Path
 $algorithms=@('hmac-md5','hmac-sha1','hmac-sha224','hmac-sha256','hmac-sha384','hmac-sha512',
 'pbkdf-md5','pbkdf-sha1','pbkdf-sha224','pbkdf-sha256','pbkdf-sha384','pbkdf-sha512','pbkdf-rmd160','pbkdf-keccak256','pbkdf-keccak512',
+'pbkdf2-md5','pbkdf2-sha1','pbkdf2-sha224','pbkdf2-sha256','pbkdf2-sha384','pbkdf2-sha512','pbkdf2-rmd160','pbkdf2-keccak256','pbkdf2-keccak512',
 'pbkdf2-hmac-md5','pbkdf2-hmac-sha1','pbkdf2-hmac-sha224','pbkdf2-hmac-sha256','pbkdf2-hmac-sha384','pbkdf2-hmac-sha512',
 'evpkdf-md5','evpkdf-sha1','evpkdf-sha224','evpkdf-sha256','evpkdf-sha384','evpkdf-sha512','evpkdf-rmd160','evpkdf-keccak256','evpkdf-keccak512')
 $lines=0;foreach($ignored in [IO.File]::ReadLines((Resolve-Path $InputFile))){$lines++}

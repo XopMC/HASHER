@@ -36,10 +36,10 @@ Runtime acceleration:
 - XXH128: official x64 runtime SIMD dispatcher and ARM64 NEON.
 - SM3: x86 SM3-NI and ARM SM3 instructions when advertised at runtime; LibTomCrypt/GmSSL fallbacks otherwise.
 - Legacy MD/RIPEMD implementations scale across independent lines through the bounded worker pool.
-- HMAC/PBKDF/PBKDF2-HMAC/EvpKDF reuse the selected digest backend; prepared HMAC states and per-OS ARM dispatch are benchmark-selected.
+- HMAC/PBKDF/direct-PBKDF2/PBKDF2-HMAC/EvpKDF reuse the selected digest backend; prepared HMAC states and per-OS ARM dispatch are benchmark-selected.
 - x64 HMAC/KDF automatic worker counts are selected from fresh 1/2/4/8-thread matrices; stale two-thread caps were removed.
 - ParallelHash uses XKCP x4 for eligible inner blocks on AVX2/AVX-512 systems.
 
 All release third-party code is linked into the executable. Windows imports only `KERNEL32.dll`; Linux, macOS and Termux releases depend only on their normal system runtime libraries. No companion DLL, `.so`, `.dylib`, configuration, or data file is required beside a release executable.
 
-Verification includes all 73 registered algorithms, official/independent KATs, prepared/one-shot parity, auto/forced-portable backend parity over boundary lengths, CLI golden tests, broken-pipe handling, ASan/UBSan, PE/ELF/Mach-O checks, and ISA disassembly. x86 SM3-NI passed Intel SDE emulation but remains in the physical-hardware backlog. ARM SM3 passed QEMU and direct execution on Qualcomm SM8850 hardware.
+Verification includes all 82 registered algorithms, official/independent KATs, prepared/one-shot parity, auto/forced-portable backend parity over boundary lengths, CLI golden tests, broken-pipe handling, ASan/UBSan, PE/ELF/Mach-O checks, and ISA disassembly. x86 SM3-NI passed Intel SDE emulation but remains in the physical-hardware backlog. ARM SM3 passed QEMU and direct execution on Qualcomm SM8850 hardware.

@@ -3,7 +3,7 @@ cmake_policy(SET CMP0091 NEW)
 if(POLICY CMP0169)
   cmake_policy(SET CMP0169 OLD)
 endif()
-project(HASHER VERSION 0.1.0 LANGUAGES C CXX)
+project(HASHER VERSION 1.1.0 LANGUAGES C CXX)
 
 set(HASHER_EXPECT_ARCH "" CACHE STRING "Expected target architecture")
 set(HASHER_PGO "OFF" CACHE STRING "OFF, GENERATE, or USE")

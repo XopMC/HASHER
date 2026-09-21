@@ -96,6 +96,15 @@ static const hasher_algorithm algorithms[] = {
  {HASHER_PBKDF_RMD160,"pbkdf-rmd160",0,20,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
  {HASHER_PBKDF_KECCAK256,"pbkdf-keccak256",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
  {HASHER_PBKDF_KECCAK512,"pbkdf-keccak512",0,64,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_MD5,"pbkdf2-md5",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_SHA1,"pbkdf2-sha1",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_SHA224,"pbkdf2-sha224",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_SHA256,"pbkdf2-sha256",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_SHA384,"pbkdf2-sha384",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_SHA512,"pbkdf2-sha512",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_RMD160,"pbkdf2-rmd160",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_KECCAK256,"pbkdf2-keccak256",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
+ {HASHER_PBKDF2_DIRECT_KECCAK512,"pbkdf2-keccak512",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
  {HASHER_PBKDF2_MD5,"pbkdf2-hmac-md5",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
  {HASHER_PBKDF2_SHA1,"pbkdf2-hmac-sha1",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
  {HASHER_PBKDF2_SHA224,"pbkdf2-hmac-sha224",0,32,HASHER_VARIABLE_OUTPUT|HASHER_KDF},
@@ -201,15 +210,15 @@ int hasher_library_init(void) {
 
 static hasher_algorithm_id underlying_base(hasher_algorithm_id id){
     switch(id){
-    case HASHER_HMAC_MD5:case HASHER_EVP_KDF_MD5:case HASHER_PBKDF_MD5:case HASHER_PBKDF2_MD5:return HASHER_MD5;
-    case HASHER_HMAC_SHA1:case HASHER_EVP_KDF_SHA1:case HASHER_PBKDF_SHA1:case HASHER_PBKDF2_SHA1:return HASHER_SHA1;
-    case HASHER_HMAC_SHA224:case HASHER_EVP_KDF_SHA224:case HASHER_PBKDF_SHA224:case HASHER_PBKDF2_SHA224:return HASHER_SHA224;
-    case HASHER_HMAC_SHA256:case HASHER_EVP_KDF_SHA256:case HASHER_PBKDF_SHA256:case HASHER_PBKDF2_SHA256:return HASHER_SHA256;
-    case HASHER_HMAC_SHA384:case HASHER_EVP_KDF_SHA384:case HASHER_PBKDF_SHA384:case HASHER_PBKDF2_SHA384:return HASHER_SHA384;
-    case HASHER_HMAC_SHA512:case HASHER_EVP_KDF_SHA512:case HASHER_PBKDF_SHA512:case HASHER_PBKDF2_SHA512:return HASHER_SHA512;
-    case HASHER_EVP_KDF_RMD160:case HASHER_PBKDF_RMD160:return HASHER_RMD160;
-    case HASHER_EVP_KDF_KECCAK256:case HASHER_PBKDF_KECCAK256:return HASHER_KECCAK_256;
-    case HASHER_EVP_KDF_KECCAK512:case HASHER_PBKDF_KECCAK512:return HASHER_KECCAK_512;
+    case HASHER_HMAC_MD5:case HASHER_EVP_KDF_MD5:case HASHER_PBKDF_MD5:case HASHER_PBKDF2_DIRECT_MD5:case HASHER_PBKDF2_MD5:return HASHER_MD5;
+    case HASHER_HMAC_SHA1:case HASHER_EVP_KDF_SHA1:case HASHER_PBKDF_SHA1:case HASHER_PBKDF2_DIRECT_SHA1:case HASHER_PBKDF2_SHA1:return HASHER_SHA1;
+    case HASHER_HMAC_SHA224:case HASHER_EVP_KDF_SHA224:case HASHER_PBKDF_SHA224:case HASHER_PBKDF2_DIRECT_SHA224:case HASHER_PBKDF2_SHA224:return HASHER_SHA224;
+    case HASHER_HMAC_SHA256:case HASHER_EVP_KDF_SHA256:case HASHER_PBKDF_SHA256:case HASHER_PBKDF2_DIRECT_SHA256:case HASHER_PBKDF2_SHA256:return HASHER_SHA256;
+    case HASHER_HMAC_SHA384:case HASHER_EVP_KDF_SHA384:case HASHER_PBKDF_SHA384:case HASHER_PBKDF2_DIRECT_SHA384:case HASHER_PBKDF2_SHA384:return HASHER_SHA384;
+    case HASHER_HMAC_SHA512:case HASHER_EVP_KDF_SHA512:case HASHER_PBKDF_SHA512:case HASHER_PBKDF2_DIRECT_SHA512:case HASHER_PBKDF2_SHA512:return HASHER_SHA512;
+    case HASHER_EVP_KDF_RMD160:case HASHER_PBKDF_RMD160:case HASHER_PBKDF2_DIRECT_RMD160:return HASHER_RMD160;
+    case HASHER_EVP_KDF_KECCAK256:case HASHER_PBKDF_KECCAK256:case HASHER_PBKDF2_DIRECT_KECCAK256:return HASHER_KECCAK_256;
+    case HASHER_EVP_KDF_KECCAK512:case HASHER_PBKDF_KECCAK512:case HASHER_PBKDF2_DIRECT_KECCAK512:return HASHER_KECCAK_512;
     default:return HASHER_ALGORITHM_COUNT;}
 }
 
@@ -251,6 +260,13 @@ const char* hasher_selected_backend(hasher_algorithm_id id) {
         if(base==HASHER_KECCAK_256||base==HASHER_KECCAK_512)return hasher_keccak_backend();
         return ((base==HASHER_SHA1||base==HASHER_SHA224||base==HASHER_SHA256)&&selected_sha_native)?"pbkdf/x86-sha":
                ((base==HASHER_SHA384||base==HASHER_SHA512)&&selected_sha512_native)?"pbkdf/x86-sha512":use_arm_hash_segments(base)?"pbkdf/arm-sha":"pbkdf/portable";
+    case HASHER_PBKDF2_DIRECT_MD5: case HASHER_PBKDF2_DIRECT_SHA1: case HASHER_PBKDF2_DIRECT_SHA224:
+    case HASHER_PBKDF2_DIRECT_SHA256: case HASHER_PBKDF2_DIRECT_SHA384: case HASHER_PBKDF2_DIRECT_SHA512:
+    case HASHER_PBKDF2_DIRECT_RMD160: case HASHER_PBKDF2_DIRECT_KECCAK256: case HASHER_PBKDF2_DIRECT_KECCAK512:
+        if(base==HASHER_MD5||base==HASHER_RMD160)return "pbkdf2-direct/rhash-c";
+        if(base==HASHER_KECCAK_256||base==HASHER_KECCAK_512)return hasher_keccak_backend();
+        return ((base==HASHER_SHA1||base==HASHER_SHA224||base==HASHER_SHA256)&&selected_sha_native)?"pbkdf2-direct/x86-sha":
+               ((base==HASHER_SHA384||base==HASHER_SHA512)&&selected_sha512_native)?"pbkdf2-direct/x86-sha512":use_arm_hash_segments(base)?"pbkdf2-direct/arm-sha":"pbkdf2-direct/portable";
     case HASHER_PBKDF2_MD5: case HASHER_PBKDF2_SHA1: case HASHER_PBKDF2_SHA224:
     case HASHER_PBKDF2_SHA256: case HASHER_PBKDF2_SHA384: case HASHER_PBKDF2_SHA512:
         if(base==HASHER_MD5)return "pbkdf2/rhash-hmac";
@@ -334,12 +350,13 @@ static int hash_segments(void* user, const uint8_t* const* data, const size_t* s
     const struct ltc_hash_descriptor* d = descriptor(id);
     size_t i;
     if(id==HASHER_MD5||id==HASHER_RMD160||use_arm_hash_segments(id)){
-        uint8_t local[1156];uint8_t* joined=local;size_t total=0,position=0;hasher_params p={0};const hasher_algorithm* a=algorithm_by_id(id);int result;
-        for(i=0;i<count;++i){if(size[i]>SIZE_MAX-total)return -1;total+=size[i];}if(total>sizeof(local)){joined=(uint8_t*)malloc(total);if(!joined)return -1;}for(i=0;i<count;++i){if(size[i])memcpy(joined+position,data[i],size[i]);position+=size[i];}
+        uint8_t local[1156];const uint8_t* joined;uint8_t* allocated=NULL;size_t total=0,position=0;hasher_params p={0};const hasher_algorithm* a=algorithm_by_id(id);int result;
+        if(count==1){joined=data[0];total=size[0];}
+        else{for(i=0;i<count;++i){if(size[i]>SIZE_MAX-total)return -1;total+=size[i];}allocated=total>sizeof(local)?(uint8_t*)malloc(total):local;if(!allocated&&total)return -1;for(i=0;i<count;++i){if(size[i])memcpy(allocated+position,data[i],size[i]);position+=size[i];}joined=allocated;}
         if(id==HASHER_MD5){if(output_size!=16)result=-1;else{hasher_rhash_md5(joined,total,output);result=0;}}
         else if(id==HASHER_RMD160){if(output_size!=20)result=-1;else{hasher_rhash_rmd160(joined,total,output);result=0;}}
         else result=hasher_compute(a,&p,joined,total,output,output_size)==CRYPT_OK?0:-1;
-        if(joined!=local)free(joined);return result;
+        if(allocated&&allocated!=local)free(allocated);return result;
     }
     if (id == HASHER_KECCAK_256 || id == HASHER_KECCAK_512) {
         hasher_keccak_ctx ctx;
@@ -359,6 +376,57 @@ static int hash_segments(void* user, const uint8_t* const* data, const size_t* s
         return d->done(&state, output) == CRYPT_OK ? 0 : -1;
     }
     return -1;
+}
+
+typedef struct direct_prefix_state {
+    hasher_algorithm_id id;
+    const struct ltc_hash_descriptor* descriptor;
+    union {
+        hash_state ltc;
+        hasher_keccak_ctx keccak;
+        _Alignas(32) uint8_t rhash[512];
+    } state;
+} direct_prefix_state;
+
+static int direct_prefix_prepare(direct_prefix_state* state,hasher_algorithm_id id,
+ const uint8_t* prefix,size_t prefix_size){
+ const struct ltc_hash_descriptor* d=descriptor(id);int err;
+ if(!state||(!prefix&&prefix_size))return -1;state->id=id;state->descriptor=NULL;
+ if(id==HASHER_MD5||id==HASHER_RMD160)
+  return hasher_rhash_prefix_prepare(state->state.rhash,sizeof(state->state.rhash),id==HASHER_RMD160,prefix,prefix_size);
+ if(id==HASHER_KECCAK_256||id==HASHER_KECCAK_512){size_t rate=id==HASHER_KECCAK_256?136u:72u;
+  if(hasher_keccak_init(&state->state.keccak,rate))return -1;return prefix_size?hasher_keccak_update(&state->state.keccak,prefix,prefix_size):0;}
+ if(!d||prefix_size>ULONG_MAX)return -1;state->descriptor=d;if((err=d->init(&state->state.ltc))!=CRYPT_OK)return -1;
+ return prefix_size&&d->process(&state->state.ltc,prefix,(unsigned long)prefix_size)!=CRYPT_OK?-1:0;
+}
+
+static int direct_prefix_compute(void* user,const uint8_t* const* suffix,const size_t* size,
+ size_t count,uint8_t* output){
+ const direct_prefix_state* state=(const direct_prefix_state*)user;size_t i;
+ if(!state||!output)return -1;
+ if(state->id==HASHER_MD5||state->id==HASHER_RMD160)return hasher_rhash_prefix_compute(state->state.rhash,suffix,size,count,output);
+ if(state->id==HASHER_KECCAK_256||state->id==HASHER_KECCAK_512){hasher_keccak_ctx ctx=state->state.keccak;
+  for(i=0;i<count;++i)if(hasher_keccak_update(&ctx,suffix[i],size[i]))return -1;
+  return hasher_keccak_final(&ctx,0x01,output,state->id==HASHER_KECCAK_256?32u:64u);}
+ if(state->descriptor){hash_state ctx=state->state.ltc;int err;for(i=0;i<count;++i){if(size[i]>ULONG_MAX)return -1;
+   if(size[i]&&(err=state->descriptor->process(&ctx,suffix[i],(unsigned long)size[i]))!=CRYPT_OK)return -1;}
+  return state->descriptor->done(&ctx,output)==CRYPT_OK?0:-1;}return -1;
+}
+
+static int direct_prefix_worthwhile(hasher_algorithm_id id){
+#if defined(_WIN32) && defined(_M_X64)
+ return id==HASHER_MD5||id==HASHER_RMD160||id==HASHER_SHA224||id==HASHER_SHA256||id==HASHER_SHA384||id==HASHER_KECCAK_256;
+#elif defined(__x86_64__)
+ return id==HASHER_MD5||id==HASHER_RMD160||id==HASHER_SHA224||id==HASHER_KECCAK_512;
+#elif defined(__APPLE__) && defined(__aarch64__)
+ return id==HASHER_MD5||id==HASHER_RMD160||id==HASHER_KECCAK_256||id==HASHER_KECCAK_512;
+#elif defined(__linux__) && defined(__aarch64__)
+ return id==HASHER_MD5||id==HASHER_RMD160||id==HASHER_KECCAK_256;
+#elif defined(_WIN32) && defined(_M_ARM64)
+ return id==HASHER_MD5||id==HASHER_RMD160||id==HASHER_KECCAK_256||id==HASHER_KECCAK_512;
+#else
+ (void)id;return 0;
+#endif
 }
 
 static int evpkdf_base(hasher_algorithm_id id, hasher_algorithm_id* base, size_t* digest_size) {
@@ -387,6 +455,20 @@ static int pbkdf_base(hasher_algorithm_id id, hasher_algorithm_id* base, size_t*
     case HASHER_PBKDF_RMD160:*base=HASHER_RMD160;*digest_size=20;return 0;
     case HASHER_PBKDF_KECCAK256:*base=HASHER_KECCAK_256;*digest_size=32;return 0;
     case HASHER_PBKDF_KECCAK512:*base=HASHER_KECCAK_512;*digest_size=64;return 0;
+    default:return -1;}
+}
+
+static int pbkdf2_direct_base(hasher_algorithm_id id, hasher_algorithm_id* base, size_t* digest_size) {
+    switch(id){
+    case HASHER_PBKDF2_DIRECT_MD5:*base=HASHER_MD5;*digest_size=16;return 0;
+    case HASHER_PBKDF2_DIRECT_SHA1:*base=HASHER_SHA1;*digest_size=20;return 0;
+    case HASHER_PBKDF2_DIRECT_SHA224:*base=HASHER_SHA224;*digest_size=28;return 0;
+    case HASHER_PBKDF2_DIRECT_SHA256:*base=HASHER_SHA256;*digest_size=32;return 0;
+    case HASHER_PBKDF2_DIRECT_SHA384:*base=HASHER_SHA384;*digest_size=48;return 0;
+    case HASHER_PBKDF2_DIRECT_SHA512:*base=HASHER_SHA512;*digest_size=64;return 0;
+    case HASHER_PBKDF2_DIRECT_RMD160:*base=HASHER_RMD160;*digest_size=20;return 0;
+    case HASHER_PBKDF2_DIRECT_KECCAK256:*base=HASHER_KECCAK_256;*digest_size=32;return 0;
+    case HASHER_PBKDF2_DIRECT_KECCAK512:*base=HASHER_KECCAK_512;*digest_size=64;return 0;
     default:return -1;}
 }
 
@@ -528,12 +610,18 @@ int hasher_compute(const hasher_algorithm* a, const hasher_params* p,
         hasher_algorithm_id base;
         size_t digest_size, block_size;
         uint64_t iterations = p && p->kdf_iterations ? p->kdf_iterations :
-            (a->id>=HASHER_PBKDF2_MD5&&a->id<=HASHER_PBKDF2_SHA512?10000u:1u);
+            (a->id>=HASHER_PBKDF2_DIRECT_MD5&&a->id<=HASHER_PBKDF2_SHA512?10000u:1u);
         int result;
         if (!evpkdf_base(a->id, &base, &digest_size))
             result=hasher_evpkdf_derive(hash_segments,(void*)(uintptr_t)base,digest_size,in,n,p?p->salt:NULL,p?p->salt_size:0,iterations,out,out_size);
         else if (!pbkdf_base(a->id,&base,&digest_size))
             result=hasher_pbkdf1_derive(hash_segments,(void*)(uintptr_t)base,digest_size,in,n,p?p->salt:NULL,p?p->salt_size:0,iterations,out,out_size);
+        else if (!pbkdf2_direct_base(a->id,&base,&digest_size)){
+            direct_prefix_state state;
+            if(use_arm_hash_segments(base)||!direct_prefix_worthwhile(base))result=hasher_pbkdf2_direct_derive(hash_segments,(void*)(uintptr_t)base,digest_size,in,n,p?p->salt:NULL,p?p->salt_size:0,iterations,out,out_size);
+            else if(direct_prefix_prepare(&state,base,in,n))result=-1;
+            else result=hasher_pbkdf2_direct_derive_prepared(direct_prefix_compute,&state,digest_size,p?p->salt:NULL,p?p->salt_size:0,iterations,out,out_size);
+        }
         else if (!pbkdf2_base(a->id,&base,&digest_size,&block_size))
         {hasher_hmac_prepared prepared;(void)block_size;
             if(prepare_base_hmac(base,in,n,&prepared,1)!=CRYPT_OK)return CRYPT_INVALID_ARG;

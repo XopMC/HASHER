@@ -1,13 +1,15 @@
-# HASHER v1.0.0
+# HASHER v1.1.0
 
 ## English
 
-The first verified release of HASHER: a deterministic streaming multi-hasher
+HASHER v1.1.0 extends the verified deterministic streaming multi-hasher
 for Windows, Linux, macOS, and Android/Termux.
 
 Highlights:
 
-- 73 hash, XOF, MAC, PBKDF/PBKDF2-HMAC, and EvpKDF algorithms;
+- 82 hash, XOF, MAC, PBKDF/direct-PBKDF2/PBKDF2-HMAC, and EvpKDF algorithms;
+- nine optimized direct-PBKDF2 compatibility variants with native digest dispatch;
+- benchmark-selected worker counts and password-prefix state cloning, with dedicated one-round and high-round matrices;
 - runtime native-instruction dispatch with safe portable fallbacks;
 - SHA-NI/AVX/AVX-512 on x64 and SHA/SM3/NEON acceleration on ARM64;
 - files of any size and native stdin/PIPE processing with bounded memory;
@@ -29,12 +31,14 @@ Verify every downloaded archive with the attached `SHA256SUMS.txt`.
 
 ## Русский
 
-Первый проверенный релиз HASHER — детерминированного потокового
+HASHER v1.1.0 — обновление проверенного детерминированного потокового
 мультихешировщика для Windows, Linux, macOS и Android/Termux.
 
 Главное:
 
-- 73 алгоритма hash, XOF, MAC, PBKDF/PBKDF2-HMAC и EvpKDF;
+- 82 алгоритма hash, XOF, MAC, PBKDF/direct-PBKDF2/PBKDF2-HMAC и EvpKDF;
+- девять оптимизированных direct-PBKDF2 вариантов с нативным digest dispatch;
+- выбранные по benchmark worker counts и клонирование password-prefix state с отдельными one-round/high-round матрицами;
 - runtime-выбор нативных инструкций с безопасным portable fallback;
 - SHA-NI/AVX/AVX-512 на x64 и SHA/SM3/NEON ускорение на ARM64;
 - файлы любого размера и нативная работа с stdin/PIPE при bounded memory;

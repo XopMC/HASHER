@@ -2,7 +2,7 @@
 
 .DEFAULT_GOAL := release
 
-VERSION ?= v1.0.0
+VERSION ?= v1.1.0
 CMAKE ?= cmake
 CTEST ?= ctest
 NINJA ?= ninja
@@ -118,8 +118,8 @@ WORK_DIR := tests/build/$(TARGET)-release
 DEBUG_DIR := tests/build/$(TARGET)-debug
 PGO_GENERATE_DIR := tests/build/$(TARGET)-pgo-generate
 PGO_USE_DIR := tests/build/$(TARGET)-pgo-use
-PROFILE_DIR := tests/profiles/$(PROFILE_NAME)-raw
-PROFILE_FILE := tests/profiles/$(PROFILE_NAME).profdata
+PROFILE_DIR := $(CURDIR)/tests/profiles/$(PROFILE_NAME)-raw
+PROFILE_FILE := $(CURDIR)/tests/profiles/$(PROFILE_NAME).profdata
 STAGE_DIR := build/$(TARGET)
 RELEASE_DIR := dist/releases/$(VERSION)
 
@@ -156,7 +156,7 @@ help:
 	@echo "[!] make debug                   Build Debug into tests/build"
 	@echo "[!] make test                    Build and run the complete local CTest suite"
 	@echo "[!] make pgo                     Generate, merge and consume a fresh local PGO profile"
-	@echo "[!] make package VERSION=v1.0.0  Build and package the current platform"
+	@echo "[!] make package VERSION=v1.1.0  Build and package the current platform"
 	@echo "[!] make package-all             Package all six already staged binaries"
 	@echo "[!] make clean                   Remove only the selected target's generated output"
 	@echo "[!] Overrides: TARGET JOBS CC CXX CMAKE CTEST NINJA LLVM_PROFDATA"
@@ -214,12 +214,12 @@ pgo: detect preflight
 	$(CMAKE) -E remove_directory $(PROFILE_DIR)
 	$(CMAKE) -E make_directory $(PROFILE_DIR)
 	$(CMAKE) --preset $(PGO_GENERATE_PRESET) $(CMAKE_OVERRIDES)
-	$(CMAKE) --build --preset $(PGO_GENERATE_PRESET) --parallel $(JOBS)
+	$(CMAKE) --build $(PGO_GENERATE_DIR) --parallel $(JOBS)
 ifeq ($(CAN_RUN),1)
 	$(CMAKE) -E env LLVM_PROFILE_FILE=$(PROFILE_DIR)/%m-%p.profraw CTEST_OUTPUT_ON_FAILURE=1 $(CTEST) --test-dir $(PGO_GENERATE_DIR) --parallel $(JOBS)
 	$(LLVM_PROFDATA) merge -output=$(PROFILE_FILE) $(PROFILE_DIR)/*.profraw
 	$(CMAKE) --preset $(PGO_USE_PRESET) $(CMAKE_OVERRIDES)
-	$(CMAKE) --build --preset $(PGO_USE_PRESET) --parallel $(JOBS)
+	$(CMAKE) --build $(PGO_USE_DIR) --parallel $(JOBS)
 	$(CMAKE) -E env CTEST_OUTPUT_ON_FAILURE=1 $(CTEST) --test-dir $(PGO_USE_DIR) --parallel $(JOBS)
 	$(CMAKE) -E remove_directory $(STAGE_DIR)
 	$(CMAKE) -E make_directory $(STAGE_DIR)

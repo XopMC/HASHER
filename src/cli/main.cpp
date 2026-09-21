@@ -80,6 +80,11 @@ static const char kHelp[] = R"HELP([!] ================== HASHER FULL HELP =====
 [!] -pbkdf-sha512 -pbkdf-rmd160
 [!] -pbkdf-keccak256 -pbkdf-keccak512                Direct PBKDF hash chain.
 [!]
+[!] -pbkdf2-md5 -pbkdf2-sha1 -pbkdf2-sha224
+[!] -pbkdf2-sha256 -pbkdf2-sha384
+[!] -pbkdf2-sha512 -pbkdf2-rmd160
+[!] -pbkdf2-keccak256 -pbkdf2-keccak512              Direct PBKDF2 hash chain.
+[!]
 [!] -pbkdf2-hmac-md5 -pbkdf2-hmac-sha1
 [!] -pbkdf2-hmac-sha224 -pbkdf2-hmac-sha256
 [!] -pbkdf2-hmac-sha384 -pbkdf2-hmac-sha512          Standard PBKDF2-HMAC.
@@ -330,8 +335,11 @@ static unsigned auto_threads(const Config& c,unsigned available){
 #endif
     }
     if(id>=HASHER_EVP_KDF_MD5&&id<=HASHER_PBKDF2_SHA512){uint64_t rounds=c.params.kdf_iterations;
-        if(!rounds&&id>=HASHER_PBKDF2_MD5)rounds=10000;if(rounds>=32)return std::min(8u,available);}
-#if defined(__linux__) && defined(__aarch64__)
+        if(!rounds&&id>=HASHER_PBKDF2_DIRECT_MD5)rounds=10000;if(rounds>=32)return std::min(8u,available);}
+#if defined(__ANDROID__) && defined(__aarch64__)
+    if(id==HASHER_PBKDF2_DIRECT_SHA224||id==HASHER_PBKDF2_DIRECT_SHA256)return std::min(4u,available);
+    return std::min(8u,available);
+#elif defined(__linux__) && defined(__aarch64__)
     return std::min(8u,available);
 #elif defined(__APPLE__) && defined(__aarch64__)
     return std::min(id==HASHER_BLAKE3?4u:8u,available);
@@ -339,6 +347,7 @@ static unsigned auto_threads(const Config& c,unsigned available){
     switch(id){
     case HASHER_HMAC_SHA1:case HASHER_HMAC_SHA256:
     case HASHER_PBKDF_SHA1:case HASHER_PBKDF_SHA224:case HASHER_PBKDF_SHA256:
+    case HASHER_PBKDF2_DIRECT_SHA1:case HASHER_PBKDF2_DIRECT_SHA256:
     case HASHER_EVP_KDF_SHA256:return std::min(4u,available);
     default:break;}
     if((id>=HASHER_HMAC_MD5&&id<=HASHER_HMAC_SHA512)||(id>=HASHER_EVP_KDF_MD5&&id<=HASHER_PBKDF2_SHA512))return std::min(8u,available);
@@ -347,6 +356,7 @@ static unsigned auto_threads(const Config& c,unsigned available){
     switch(id){
     case HASHER_HMAC_SHA1:case HASHER_HMAC_SHA256:
     case HASHER_PBKDF_SHA1:case HASHER_PBKDF_SHA224:case HASHER_PBKDF_SHA256:
+    case HASHER_PBKDF2_DIRECT_SHA1:case HASHER_PBKDF2_DIRECT_SHA224:case HASHER_PBKDF2_DIRECT_SHA256:
     case HASHER_EVP_KDF_SHA256:return std::min(4u,available);
     default:break;}
     if((id>=HASHER_HMAC_MD5&&id<=HASHER_HMAC_SHA512)||(id>=HASHER_EVP_KDF_MD5&&id<=HASHER_PBKDF2_SHA512))return std::min(8u,available);

@@ -12,9 +12,9 @@
 The release suite contains:
 
 - KAT/smoke checks for every registered algorithm;
-- official SHA/SHA-3/SP 800-185/BLAKE/XXH/SM3/HMAC/PBKDF2 vectors and EvpKDF compatibility vectors;
+- official SHA/SHA-3/SP 800-185/BLAKE/XXH/SM3/HMAC/PBKDF2 vectors, independent direct-PBKDF2 vectors, and EvpKDF compatibility vectors;
 - prepared HMAC and SP 800-185 parity against one-shot computation;
-- auto versus forced-portable parity for 49 hash/HMAC algorithms plus separate parity for all 24 KDF variants;
+- auto versus forced-portable parity for 49 hash/HMAC algorithms plus separate parity for all 33 KDF variants;
 - CLI help, aliases, deduplication, binary iterations, UTF-8/hex, CRLF/LF, empty/final lines, 1024-byte truncation, multi-file input, deterministic 1/8-thread output, and one-digest-per-line checks;
 - broken-pipe exit-code and no-hang checks on Linux/macOS.
 
@@ -22,4 +22,4 @@ Optional-instruction objects were compiled separately from baseline objects. Dis
 
 SM3 optional backends are isolated too: baseline objects contain no SM3 instructions; dedicated objects contain x86 `vsm3*` or ARM `sm3*`. Native KATs cover official vectors, padding boundaries, and every input length 0..1025 against an independent scalar implementation.
 
-All 73 registered algorithms pass smoke/KAT execution in auto, forced-portable, and native test runs. Linux x64 ASan+UBSan also passes 6/6 targets. Final Linux ARM64 and macOS ARM64 sources were rebuilt and tested natively over SSH after the ARM message-schedule, SHA3 batching and NEON codec changes. Windows ARM64 was cross-built successfully from the same source.
+All 82 registered algorithms pass smoke/KAT execution in auto, forced-portable, and native test runs. Linux x64 ASan+UBSan also passes 6/6 targets. Final Linux ARM64 and macOS ARM64 sources were rebuilt and tested natively over SSH after the ARM message-schedule, SHA3 batching and NEON codec changes. Windows ARM64 was cross-built successfully from the same source.

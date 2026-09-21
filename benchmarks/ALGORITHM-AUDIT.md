@@ -2,6 +2,17 @@
 
 This matrix tracks the fastest implementation allowed by the project rule: C11 source and compiler intrinsics are allowed; handwritten assembly and runtime crypto DLLs are not.
 
+The nine `pbkdf2-*` names are intentionally non-standard compatibility chains;
+standards-compatible PBKDF2 is exposed only as `pbkdf2-hmac-*`. No upstream
+project provides the requested direct-hash construction as a distinct optimized
+primitive. It therefore reuses HASHER's audited native digest backends. The
+unchanged password prefix is pre-absorbed and the hash state is cloned only for
+the platform/algorithm combinations where real high-round benchmarks improved;
+other combinations retain the faster reusable-buffer path. RHash handles MD5/RIPEMD-160,
+SHA intrinsics handle SHA-1/224/256, the optimized SHA-512 core handles
+SHA-384/512, and XKCP handles Keccak-256/512. Runtime selection remains safe,
+with portable/native equality covered by backend-parity tests.
+
 | Algorithm | Selected implementation | Alternatives checked | Status |
 |---|---|---|---|
 | SHA-1 | LibTomCrypt SHA-NI / ARM SHA1 / LTC fallback | SHA-Intrinsics, OpenSSL, Intel multi-buffer | Full ARM hardware message schedule added; SM8850 core throughput improved ~2.5x over the previous native path |
@@ -62,6 +73,15 @@ This matrix tracks the fastest implementation allowed by the project rule: C11 s
 | PBKDF-RIPEMD160 | Extended chain over RHash RIPEMD-160 | RHash/LibTomCrypt/OpenSSL primitives | KAT and x64/ARM file/PIPE verified |
 | PBKDF-Keccak256 | Extended chain over optimized Keccak | XKCP | KAT and x64/ARM file/PIPE verified |
 | PBKDF-Keccak512 | Extended chain over optimized Keccak | XKCP | KAT and x64/ARM file/PIPE verified |
+| direct-PBKDF2-MD5 | Reused message buffer + RHash MD5 | RHash, LibTomCrypt primitives | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-SHA1 | Reused message buffer + selected SHA-1 backend | AWS SHA intrinsics, ARM ACLE | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-SHA224 | Reused message buffer + selected SHA-224 backend | AWS SHA intrinsics, ARM ACLE | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-SHA256 | Reused message buffer + selected SHA-256 backend | AWS SHA intrinsics, ARM ACLE | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-SHA384 | Reused message buffer + selected SHA-384 backend | optimized SHA-512 core, ARM ACLE | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-SHA512 | Reused message buffer + selected SHA-512 backend | optimized SHA-512 core, ARM ACLE | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-RIPEMD160 | Reused message buffer + RHash RIPEMD-160 | RHash | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-Keccak256 | Reused message buffer + runtime XKCP backend | XKCP | Independent KAT; x64/ARM thread scaling |
+| direct-PBKDF2-Keccak512 | Reused message buffer + runtime XKCP backend | XKCP | Independent KAT; x64/ARM thread scaling |
 | PBKDF2-HMAC-MD5 | Prepared RHash HMAC states | OpenSSL, LibTomCrypt | Independent vectors and x64/ARM E2E verified |
 | PBKDF2-HMAC-SHA1 | Prepared/ARM HMAC states | OpenSSL, LibTomCrypt | RFC-compatible vectors and x64/ARM E2E verified |
 | PBKDF2-HMAC-SHA224 | Prepared/ARM HMAC states | OpenSSL, LibTomCrypt | Independent vectors and x64/ARM E2E verified |

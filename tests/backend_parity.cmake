@@ -44,7 +44,9 @@ foreach(algorithm sha3-224 sha3-256 sha3-384 sha3-512 keccak-224 keccak-256 kecc
 endforeach()
 
 set(kdfs pbkdf-md5 pbkdf-sha1 pbkdf-sha224 pbkdf-sha256 pbkdf-sha384 pbkdf-sha512
-  pbkdf-rmd160 pbkdf-keccak256 pbkdf-keccak512 pbkdf2-hmac-md5 pbkdf2-hmac-sha1
+  pbkdf-rmd160 pbkdf-keccak256 pbkdf-keccak512
+  pbkdf2-md5 pbkdf2-sha1 pbkdf2-sha224 pbkdf2-sha256 pbkdf2-sha384 pbkdf2-sha512
+  pbkdf2-rmd160 pbkdf2-keccak256 pbkdf2-keccak512 pbkdf2-hmac-md5 pbkdf2-hmac-sha1
   pbkdf2-hmac-sha224 pbkdf2-hmac-sha256 pbkdf2-hmac-sha384 pbkdf2-hmac-sha512
   evpkdf-md5 evpkdf-sha1 evpkdf-sha224 evpkdf-sha256 evpkdf-sha384 evpkdf-sha512
   evpkdf-rmd160 evpkdf-keccak256 evpkdf-keccak512)

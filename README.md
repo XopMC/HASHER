@@ -41,15 +41,15 @@ hot loop.
 ## Download Builds
 
 Verified binaries are published in the private
-[`v1.0.0` release](https://github.com/XopMC/HASHER/releases/tag/v1.0.0):
+[`v1.1.0` release](https://github.com/XopMC/HASHER/releases/tag/v1.1.0):
 
 ```text
-HASHER-v1.0.0-win-x64.zip
-HASHER-v1.0.0-win-arm64.zip
-HASHER-v1.0.0-linux-x64.tar.gz
-HASHER-v1.0.0-linux-arm64.tar.gz
-HASHER-v1.0.0-macos-arm64.tar.gz
-HASHER-v1.0.0-android-arm64-termux.tar.gz
+HASHER-v1.1.0-win-x64.zip
+HASHER-v1.1.0-win-arm64.zip
+HASHER-v1.1.0-linux-x64.tar.gz
+HASHER-v1.1.0-linux-arm64.tar.gz
+HASHER-v1.1.0-macos-arm64.tar.gz
+HASHER-v1.1.0-android-arm64-termux.tar.gz
 SHA256SUMS.txt
 ```
 
@@ -149,7 +149,7 @@ Run `HASHER -help` for aliases, defaults, examples, and error codes.
 
 ## Supported Algorithms
 
-The registry contains 73 independently selectable algorithms.
+The registry contains 82 independently selectable algorithms.
 
 ### SHA and Keccak families
 
@@ -200,6 +200,17 @@ pbkdf2-hmac-md5  pbkdf2-hmac-sha1  pbkdf2-hmac-sha224
 pbkdf2-hmac-sha256  pbkdf2-hmac-sha384  pbkdf2-hmac-sha512
 ```
 
+### Direct PBKDF2 chains
+
+```text
+pbkdf2-md5  pbkdf2-sha1  pbkdf2-sha224  pbkdf2-sha256  pbkdf2-sha384
+pbkdf2-sha512  pbkdf2-rmd160  pbkdf2-keccak256  pbkdf2-keccak512
+```
+
+These compatibility variants use the selected digest directly as the PBKDF2
+round function: `U1=H(password||salt||counter)`, `Uj=H(password||Uj-1)`, with
+the usual per-block XOR. Use `pbkdf2-hmac-*` for standards-compatible PBKDF2-HMAC.
+
 ### OpenSSL/CryptoJS-compatible EvpKDF
 
 ```text
@@ -244,10 +255,11 @@ Selected 260 MiB corpus results, 4,194,304 lines:
 | XXH128 | 25.80 M | 26.79 M | 23.52 M | 23.48 M |
 | HMAC-SHA256 | 15.41 M | 15.84 M | 14.35 M | 13.70 M |
 | PBKDF2-HMAC-SHA256, one KDF round | 14.77 M | 15.54 M | 13.08 M | 12.24 M |
+| direct-PBKDF2-SHA256, one KDF round | 19.44 M | 19.52 M | 12.37 M | 11.69 M |
 
 On Qualcomm SM8850, SHA-256 reached approximately 21.5 M file lines/s and
-17.9 M PIPE lines/s. All 73 algorithms processed the 260 MiB corpus in 18.718
-seconds from a file and 21.614 seconds from PIPE.
+17.9 M PIPE lines/s. The v1.0 73-algorithm baseline processed the 260 MiB
+corpus in 18.718 seconds from a file and 21.614 seconds from PIPE.
 
 Measurements include input, splitting, hashing, hexadecimal conversion, and
 buffered output. Full CSV evidence is kept in `benchmarks/` and summarized in
@@ -281,8 +293,8 @@ make detect
 make test
 make debug
 make pgo
-make package VERSION=v1.0.0
-make package-all VERSION=v1.0.0
+make package VERSION=v1.1.0
+make package-all VERSION=v1.1.0
 make help
 ```
 
@@ -298,7 +310,7 @@ default on platforms where the measured representative workload regressed.
 
 ## Verification
 
-- all 73 registry entries have smoke/KAT coverage;
+- all 82 registry entries have smoke/KAT coverage;
 - official SHA, SHA-3, SP 800-185, BLAKE, XXH, SM3, HMAC and PBKDF2 vectors;
 - one-shot/prepared and portable/native parity;
 - boundary inputs, binary data, streaming chunks and unaligned buffers;
@@ -363,15 +375,15 @@ checks в горячем цикле.
 ## Скачать готовые сборки
 
 Проверенные бинарники находятся в приватном
-[`Release v1.0.0`](https://github.com/XopMC/HASHER/releases/tag/v1.0.0):
+[`Release v1.1.0`](https://github.com/XopMC/HASHER/releases/tag/v1.1.0):
 
 ```text
-HASHER-v1.0.0-win-x64.zip
-HASHER-v1.0.0-win-arm64.zip
-HASHER-v1.0.0-linux-x64.tar.gz
-HASHER-v1.0.0-linux-arm64.tar.gz
-HASHER-v1.0.0-macos-arm64.tar.gz
-HASHER-v1.0.0-android-arm64-termux.tar.gz
+HASHER-v1.1.0-win-x64.zip
+HASHER-v1.1.0-win-arm64.zip
+HASHER-v1.1.0-linux-x64.tar.gz
+HASHER-v1.1.0-linux-arm64.tar.gz
+HASHER-v1.1.0-macos-arm64.tar.gz
+HASHER-v1.1.0-android-arm64-termux.tar.gz
 SHA256SUMS.txt
 ```
 
@@ -472,7 +484,7 @@ Hex-текст никогда не становится входом следу�
 
 ## Поддерживаемые алгоритмы
 
-В registry находятся 73 независимо выбираемых алгоритма.
+В registry находятся 82 независимо выбираемых алгоритма.
 
 ### SHA и Keccak
 
@@ -523,6 +535,17 @@ pbkdf2-hmac-md5  pbkdf2-hmac-sha1  pbkdf2-hmac-sha224
 pbkdf2-hmac-sha256  pbkdf2-hmac-sha384  pbkdf2-hmac-sha512
 ```
 
+### Прямые цепочки PBKDF2
+
+```text
+pbkdf2-md5  pbkdf2-sha1  pbkdf2-sha224  pbkdf2-sha256  pbkdf2-sha384
+pbkdf2-sha512  pbkdf2-rmd160  pbkdf2-keccak256  pbkdf2-keccak512
+```
+
+Эти compatibility-варианты используют выбранный digest напрямую как round
+function: `U1=H(password||salt||counter)`, `Uj=H(password||Uj-1)`, затем XOR
+внутри блока. Для стандартного PBKDF2-HMAC используйте `pbkdf2-hmac-*`.
+
 ### EvpKDF, совместимый с OpenSSL/CryptoJS
 
 ```text
@@ -567,10 +590,11 @@ evpkdf-sha512  evpkdf-rmd160  evpkdf-keccak256  evpkdf-keccak512
 | XXH128 | 25.80 M | 26.79 M | 23.52 M | 23.48 M |
 | HMAC-SHA256 | 15.41 M | 15.84 M | 14.35 M | 13.70 M |
 | PBKDF2-HMAC-SHA256, один KDF round | 14.77 M | 15.54 M | 13.08 M | 12.24 M |
+| direct-PBKDF2-SHA256, один KDF round | 19.44 M | 19.52 M | 12.37 M | 11.69 M |
 
 На Qualcomm SM8850 SHA-256 достиг примерно 21.5 M строк/с из файла и 17.9 M
-строк/с из PIPE. Все 73 алгоритма вместе обработали корпус 260 МиБ за 18.718
-секунды из файла и 21.614 секунды из PIPE.
+строк/с из PIPE. Базовая v1.0-матрица из 73 алгоритмов обработала корпус
+260 МиБ за 18.718 секунды из файла и 21.614 секунды из PIPE.
 
 В измерения входят чтение, разбор строк, хеширование, hex-кодирование и
 буферизированный вывод. Полные CSV находятся в `benchmarks/`, сводка — в
@@ -602,8 +626,8 @@ make detect
 make test
 make debug
 make pgo
-make package VERSION=v1.0.0
-make package-all VERSION=v1.0.0
+make package VERSION=v1.1.0
+make package-all VERSION=v1.1.0
 make help
 ```
 
@@ -619,7 +643,7 @@ make TARGET=linux-arm64 CC=/opt/llvm/bin/clang CXX=/opt/llvm/bin/clang++ JOBS=8
 
 ## Проверка корректности
 
-- smoke/KAT для всех 73 registry entries;
+- smoke/KAT для всех 82 registry entries;
 - официальные vectors SHA, SHA-3, SP 800-185, BLAKE, XXH, SM3, HMAC и PBKDF2;
 - parity one-shot/prepared и portable/native;
 - boundary lengths, binary input, streaming chunks и unaligned buffers;
